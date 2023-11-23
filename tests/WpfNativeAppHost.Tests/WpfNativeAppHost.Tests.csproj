@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>WpfNativeAppHost.Tests</AssemblyName>
+    <RootNamespace>WpfNativeAppHost.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <!-- The assembly under test is a WPF application, so its framework reference is needed here too. -->
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\WpfNativeAppHost.App\WpfNativeAppHost.App.csproj" />
+    <!--
+      The test target is launched as a process, never linked against. The reference exists only so
+      that it is built before these tests run; CopyTestTarget below puts it where they can find it.
+    -->
+    <ProjectReference Include="..\WpfNativeAppHost.TestTarget\WpfNativeAppHost.TestTarget.csproj"
+                      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!--
+    Copy the test target's whole output folder, not just its executable: as a framework-dependent
+    application it needs the .runtimeconfig.json next to it in order to start at all.
+  -->
+  <Target Name="CopyTestTarget" AfterTargets="Build">
+    <ItemGroup>
+      <TestTargetOutput Include="$(MSBuildThisFileDirectory)..\WpfNativeAppHost.TestTarget\bin\$(Configuration)\$(TargetFramework)\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(TestTargetOutput)"
+          DestinationFolder="$(OutDir)TestTarget\%(RecursiveDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

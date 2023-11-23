@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>WpfNativeAppHost</RootNamespace>
+    <AssemblyName>WpfNativeAppHost</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The hosting and interop types are implementation detail of the app, but the tests need them. -->
+    <InternalsVisibleTo Include="WpfNativeAppHost.Tests" />
+  </ItemGroup>
+
+</Project>

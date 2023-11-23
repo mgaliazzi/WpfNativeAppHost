@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>WpfNativeAppHost.TestTarget</RootNamespace>
+    <AssemblyName>WpfNativeAppHost.TestTarget</AssemblyName>
+    <!-- This project supplies its own Main, so the SDK must not look for an App.xaml. -->
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,24 @@
+<Window x:Class="WpfNativeAppHost.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:WpfNativeAppHost.Views"
+        mc:Ignorable="d"
+        Title="WPF Native App Host" Height="700" Width="1100">
+    <!--
+        A deliberately ordinary WPF shell - docked panes on either side, a status bar underneath -
+        wrapped around a window that belongs to an entirely different process. If the guest renders
+        in the middle while these panes still behave like WPF, the technique works.
+    -->
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Text="The centre pane is another process's window, reparented into this one." />
+        </StatusBar>
+
+        <views:PropertyView DockPanel.Dock="Left" Width="220" />
+        <views:ReportView DockPanel.Dock="Right" Width="220" />
+
+        <views:HostedAppView />
+    </DockPanel>
+</Window>

@@ -1,0 +1,18 @@
+<Project>
+
+  <!--
+    Settings shared by every project in the repository. Individual .csproj files
+    only carry what is genuinely specific to them (output type, package refs, ...).
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- The reparenting trick is Windows-only by nature, so there is no cross-platform story. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+</Project>
