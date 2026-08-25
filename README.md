@@ -1,5 +1,7 @@
 # WPF Native App Host
 
+[![CI](https://github.com/mgaliazzi/WpfNativeAppHost/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mgaliazzi/WpfNativeAppHost/actions/workflows/ci.yml)
+
 Embed a running Qt desktop application — FreeCAD, for example — inside a WPF window, so that a
 .NET/C# shell can wrap a UI it did not write and cannot rebuild.
 
@@ -10,10 +12,6 @@ underneath a WPF `HwndHost`. From then on WPF positions, sizes and clips it like
 > parts you need. The interesting code is about 400 lines across
 > [`Hosting/`](src/WpfNativeAppHost.App/Hosting) and [`Interop/`](src/WpfNativeAppHost.App/Interop).
 
-<!--
-  Add a screenshot here once you have one - it is the fastest way to show what this does:
-  ![The shell hosting FreeCAD](docs/screenshot.png)
--->
 
 ## How it works
 
@@ -158,27 +156,6 @@ To skip them — which is what CI does:
 ```bash
 dotnet test --filter "Category!=Integration"
 ```
-
-## Known limitations
-
-These are properties of the technique, not bugs to be fixed. Read them before adopting it.
-
-- **Airspace.** The embedded `HWND` always paints over WPF content. You cannot put WPF overlays,
-  adorners, tooltips or popups on top of the hosted view, and you cannot make it transparent.
-- **It is a separate process.** There is no in-process access to the guest's object model. Driving
-  FreeCAD from C# needs IPC, or FreeCAD's own Python and add-on interfaces — not this.
-- **Dialogs and menus escape.** The guest's modal dialogs, dropdown menus and floating tool windows
-  are their own top-level windows. They appear outside the WPF shell and are not clipped by it.
-- **Keyboard focus is fiddly.** Input crosses an `HwndHost` boundary. Accelerators, tab order and
-  `IKeyboardInputSink` behaviour need care beyond what this sample does.
-- **DPI.** The WPF process and the guest process negotiate DPI awareness independently. On a
-  multi-monitor setup with mixed scaling, expect the embedded window to be scaled wrongly.
-- **The guest can outlive its welcome.** Teardown asks politely (`WM_CLOSE`), waits, then kills the
-  process. An application that refuses to close, or that prompts to save, will be killed.
-- **The adopted window is borrowed, not owned.** If the guest destroys its main window between the
-  moment it is found and the moment WPF adopts it, the host has nothing to embed and reports the
-  failure rather than recovering. A shell that must survive that would need to create its own child
-  window and reparent the guest into it, instead of handing the guest's window straight to WPF.
 
 ## Credits
 
