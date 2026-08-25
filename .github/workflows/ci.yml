@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    # WPF and the Win32 interop this repository is about only build on Windows.
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore WpfNativeAppHost.sln
+
+      - name: Build
+        run: dotnet build WpfNativeAppHost.sln --configuration Release --no-restore
+
+      # The integration tests launch real windows and adopt them, which needs an interactive
+      # desktop session. Run those locally with: dotnet test --filter Category=Integration
+      - name: Test
+        run: dotnet test WpfNativeAppHost.sln --configuration Release --no-build --filter "Category!=Integration"
